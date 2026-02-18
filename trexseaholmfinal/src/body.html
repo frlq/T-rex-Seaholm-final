@@ -1,0 +1,80 @@
+<!-- Copyright (c) 2022 8th Wall, Inc. -->
+<!-- body.html is optional; elements will be added to your html body after app.js is loaded. -->
+
+<div class="over">
+  <span id="promptText">Tap to place Stevie and Ladybird</span>
+  <span id="captionText"></span>
+</div>
+
+<!-- Add the tap-place component to the scene so it has an effect -->
+<a-scene
+  tap-place
+  caption-comp
+  landing-page
+  xrextras-loading
+  xrextras-runtime-error
+  renderer="colorManagement:true; physicallyCorrectLights:true"
+  renderer.useLegacyLights="false;"
+  xrweb="
+    allowedDevices: any;
+    defaultEnvironmentFogIntensity: 0.5; 
+    defaultEnvironmentFloorTexture: #groundTex; 
+    defaultEnvironmentFloorColor: #FFF;
+    defaultEnvironmentSkyBottomColor: #B4C4CC; 
+    defaultEnvironmentSkyTopColor: #5ac8fa;
+    defaultEnvironmentSkyGradientStrength: 0.5;">
+  <!-- We can define assets here to be loaded when A-Frame initializes -->
+  <a-assets>
+    <img id="groundTex" src="assets/sand.jpg" />
+    <a-asset-item id="cactusModel" src="assets/cactus.glb"></a-asset-item>
+    <a-asset-item id="birdModel" src="assets/bird_1.glb" animation-mixer="clip:*;"></a-asset-item>
+    <a-asset-item
+      id="trexModel"
+      src="assets/Stevie_cleaned.glb"
+      animation-mixer
+      clips="stevie|Jump stevie|stevie|Idle stevie|stevie|Jump stevie|stevie|stomp stevie|stevie|Wave"
+      anim-controller></a-asset-item>
+    <audio id="trexSound" src="assets/Ladybird_Seaholm_VO.mp3" preload="auto"></audio>
+    <a-entity
+      id="captionController"
+      captions="script: Greetings, young explorers! Did you know this spot was once the heartbeat of Austin's energy? Back when dinosaurs like my friend, T-Rex roamed the Earth... Well, not exactly here, but you get the idea! This grand structure behind me, with its art deco flair, has been many things: a coal powerhouse, a beacon of light for post-war Austin, and now, a symbol of our city's green building. Imagine, this place once powered homes with oil and coal, but today, this entire district highlights how we can help the planet by using more renewable energy and less water. And just like T-Rex, who loves eBikes and dancing, this place reminds us to keep moving and grooving towards a cleaner, greener planet. So, let's pedal our way to a brighter future, right here in the Seaholm District!"
+      info="duration: 50; chunkSize: 6; audioId: trexSound; textId: captionText"></a-entity>
+  </a-assets>
+
+  <!-- The raycaster will emit mouse events on scene objects specified with the cantap class -->
+  <a-camera
+    id="camera"
+    position="0 8 8"
+    raycaster="objects: .cantap"
+    cursor="
+      fuse: false;
+      rayOrigin: mouse;">
+  </a-camera>
+
+  <a-entity
+    light="
+      type: directional;
+      intensity: 3.9;
+      castShadow: true;
+      shadowMapHeight: 2048;
+      shadowMapWidth: 2048;
+      shadowCameraTop: 40;
+      shadowCameraBottom: -40;
+      shadowCameraRight: 40;
+      shadowCameraLeft: -40;"
+    position="0 10 0"
+    rotation="-90 0 0"
+    shadow>
+  </a-entity>
+
+  <a-light type="ambient" intensity=".7"></a-light>
+  <!-- Adding the cantap class allows the ground to be clicked -->
+  <a-box
+    id="ground"
+    class="cantap"
+    scale="1000 2 1000"
+    position="0 -0.99 0"
+    material="shader: shadow; transparent: true; opacity: 0.4"
+    shadow>
+  </a-box>
+</a-scene>
